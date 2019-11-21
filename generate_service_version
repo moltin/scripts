@@ -1,14 +1,17 @@
 #!/bin/bash
 
-if [[ $1 = breaking* ]]; then
-  ((MAJOR_VERSION=MAJOR_VERSION+1))
-  MINOR_VERSION=0
-  PATCH_VERSION=0
-elif [[ $1 = feature* ]]; then
-  ((MINOR_VERSION=MINOR_VERSION+1))
-  PATCH_VERSION=0
-else
-  ((PATCH_VERSION=PATCH_VERSION+1))
-fi
+case $1 in
+  breaking*)
+    ((MAJOR_VERSION=MAJOR_VERSION+1))
+    MINOR_VERSION=0
+    PATCH_VERSION=0
+    ;;
+  feature*)
+    ((MINOR_VERSION=MINOR_VERSION+1))
+    PATCH_VERSION=0
+    ;;
+  *)
+    ((PATCH_VERSION=PATCH_VERSION+1))
+esac
 
-export VERSION="${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}"
+echo "${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}"
