@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+
+def current_branch
+  branches = `git branch --no-color`.split(/\n/)
+  branches.select{ |b| b =~ /\s*\*/ }.first.gsub(/[\*\s]/, "")
+end
+
+branch = current_branch
+prefixes = ['feature', 'bug', 'breaking', 'chore']
+regex = /^(#{prefixes.join('|')})\/CORE-\d+-/
+
+if branch != "master" && branch !~ regex
+  puts
+  puts " \033[31m! Failed to commit !\e[0m"
+  puts " You are trying to commit on the \e[32m*#{branch}*\e[0m branch"
+  puts " Branches need to be prefixed properly to help with semantic versioning"
+  puts
+  puts " \033[33mEG: feature/CORE-1096-new-feature\e[0m"
+  puts
+
+  exit 1
+end
